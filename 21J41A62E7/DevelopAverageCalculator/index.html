@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Average Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    label, button { margin-top: 10px; }
+    #result { margin-top: 20px; }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('calculate').addEventListener('click', () => {
+        const type = document.getElementById('type').value;
+        const resultDiv = document.getElementById('result');
+        const numbers = generateNumbers(type);
+        const average = calculateAverage(numbers);
+        
+        if (numbers.length === 0) {
+          resultDiv.innerHTML = 'Invalid type or no numbers generated.';
+        } else {
+          resultDiv.innerHTML = `
+            <p>Type: ${type}</p>
+            <p>Numbers: ${numbers.join(', ')}</p>
+            <p>Average: ${average.toFixed(2)}</p>
+          `;
+        }
+      });
+
+      function generateNumbers(type) {
+        const numbers = [];
+        switch (type) {
+          case 'p': // Prime numbers
+            for (let i = 2; i <= 100; i++) {
+              if (isPrime(i)) numbers.push(i);
+            }
+            break;
+          case 'f': // Fibonacci numbers
+            let a = 0, b = 1;
+            while (a <= 100) {
+              numbers.push(a);
+              [a, b] = [b, a + b];
+            }
+            break;
+          case 'e': // Even numbers
+            for (let i = 0; i <= 100; i += 2) numbers.push(i);
+            break;
+          case 'r': // Random numbers
+            for (let i = 0; i < 10; i++) numbers.push(Math.floor(Math.random() * 100));
+            break;
+          default:
+            return [];
+        }
+        return numbers;
+      }
+
+      function isPrime(num) {
+        if (num <= 1) return false;
+        if (num <= 3) return true;
+        if (num % 2 === 0 || num % 3 === 0) return false;
+        for (let i = 5; i * i <= num; i += 6) {
+          if (num % i === 0 || num % (i + 2) === 0) return false;
+        }
+        return true;
+      }
+
+      function calculateAverage(numbers) {
+        const sum = numbers.reduce((acc, val) => acc + val, 0);
+        return sum / numbers.length;
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Average Calculator</h1>
+    <label for="type">Number Type:</label>
+    <select id="type">
+      <option value="p">Prime</option>
+      <option value="f">Fibonacci</option>
+      <option value="e">Even</option>
+      <option value="r">Random</option>
+    </select>
+    <button id="calculate">Calculate Average</button>
+    <div id="result"></div>
+  </div>
+</body>
+</html>
